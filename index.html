@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Emergencia - Salva Vidas Sin Internet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f0f19;
+            --bg-card: #1a1a2e;
+            --cyan: #00ffff;
+            --purple: #8a2be2;
+            --green: #00ff7f;
+            --red: #ff2d55;
+            --orange: #ff9500;
+            --text: #e0e0e0;
+            --text-dim: #8a8a9a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: radial-gradient(ellipse at 30% 20%, rgba(138,43,226,0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(0,255,255,0.1) 0%, transparent 60%),
+                        var(--bg);
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,45,85,0.15);
+            border: 1px solid rgba(255,45,85,0.3);
+            color: var(--red);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,45,85,0.4); }
+            50% { opacity: 0.85; box-shadow: 0 0 20px 5px rgba(255,45,85,0.1); }
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 50%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-dim);
+            max-width: 650px;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* BOTÓN DE DESCARGA */
+        .download-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, #ff2d55 0%, #ff6b35 50%, #ff9500 100%);
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            padding: 1.4rem 3.5rem;
+            border-radius: 100px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(255,45,85,0.4), 0 0 0 0 rgba(255,45,85,0.6);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: heartbeat 2.5s ease-in-out infinite;
+        }
+        .btn-download::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-download:hover::before {
+            left: 100%;
+        }
+        .btn-download:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(255,45,85,0.5), 0 0 30px rgba(255,149,0,0.3);
+        }
+        .btn-download:active {
+            transform: scale(0.98);
+        }
+        @keyframes heartbeat {
+            0%, 100% { box-shadow: 0 10px 40px rgba(255,45,85,0.4), 0 0 0 0 rgba(255,45,85,0.4); }
+            50% { box-shadow: 0 15px 50px rgba(255,45,85,0.5), 0 0 0 15px rgba(255,45,85,0); }
+        }
+        .btn-icon {
+            font-size: 1.8rem;
+        }
+        .download-meta {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        .download-meta span {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        /* STATS */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--cyan);
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* SCROLL INDICATOR */
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* FEATURES */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 4rem;
+            line-height: 1.6;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(138,43,226,0.3);
+        }
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.2rem;
+        }
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+        .feature-card p {
+            color: var(--text-dim);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* HOW IT WORKS */
+        .how-it-works {
+            background: linear-gradient(180deg, var(--bg) 0%, rgba(138,43,226,0.05) 50%, var(--bg) 100%);
+            padding: 6rem 2rem;
+        }
+        .steps-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .step {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            align-items: flex-start;
+        }
+        .step-number {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            color: #fff;
+            box-shadow: 0 5px 25px rgba(138,43,226,0.3);
+        }
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        .step-content p {
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+        .step-content code {
+            background: rgba(0,255,255,0.1);
+            color: var(--cyan);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        /* DEMO */
+        .demo-section {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        .demo-card {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            position: relative;
+        }
+        .demo-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--cyan), var(--purple), var(--green));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .wifi-name {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0,255,127,0.1);
+            color: var(--green);
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin: 1rem 0;
+            border: 1px solid rgba(0,255,127,0.2);
+        }
+        .password-pill {
+            background: rgba(255,149,0,0.1);
+            color: var(--orange);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 0.5rem;
+            border: 1px solid rgba(255,149,0,0.2);
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            border-color: rgba(138,43,226,0.2);
+        }
+        .faq-question {
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+        .faq-answer {
+            padding: 0 1.5rem 1.2rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+            display: none;
+        }
+        .faq-item.open .faq-answer { display: block; }
+        .faq-item.open .faq-arrow { transform: rotate(180deg); }
+        .faq-arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-quote {
+            font-style: italic;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        .footer-author {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+        .footer-version {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: var(--cyan);
+        }
+
+        /* NOTIFICATION */
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(0,255,127,0.3);
+            color: var(--green);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(120%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1000;
+        }
+        .notification.show {
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .btn-download {
+                font-size: 1.1rem;
+                padding: 1.2rem 2.5rem;
+            }
+            .stats-bar { gap: 1.5rem; }
+            .step { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span>🔴</span> App de Emergencia — Sin Internet
+        </div>
+        <h1>
+            Cuando todo falla,<br>
+            <span class="gradient">SOS Emergencia</span> responde
+        </h1>
+        <p class="hero-subtitle">
+            Aplicación que permite a víctimas atrapadas bajo escombros 
+            crear señales WiFi Direct detectables por drones de rescate. 
+            Funciona <strong style="color: var(--green)">sin internet</strong> y 
+            <strong style="color: var(--green)">sin señal celular</strong>.
+        </p>
+
+        <div class="download-section">
+            <a href="https://drive.google.com/drive/folders/1zIJWbcRgusnH80fr3RaDh4shfxFxjspg" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="btn-download" 
+               id="downloadBtn">
+                <span class="btn-icon">⬇️</span>
+                <span>DESCARGAR SOS EMERGENCIA</span>
+            </a>
+            <p class="download-meta">APK para Android <span>•</span> Gratis <span>•</span> Open Source</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-number">0</span>
+                <span class="stat-label">Internet necesario</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">100m</span>
+                <span class="stat-label">Alcance WiFi</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Activación automática</span>
+            </div>
+        </div>
+
+        <div class="scroll-down">
+            <span>↓</span>
+            <span>Más info</span>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">¿Qué hace <span class="gradient" style="background: linear-gradient(135deg, var(--cyan), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SOS Emergencia</span>?</h2>
+        <p class="section-subtitle">Una herramienta de código abierto diseñada para salvar vidas en desastres naturales y derrumbes.</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📡</div>
+                <h3>Señal WiFi Direct</h3>
+                <p>Crea una red WiFi personalizada con tu DNI que los drones de rescate detectan desde el aire. Sin internet, sin celular.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Chat de Emergencia</h3>
+                <p>Los rescatistas se conectan a tu red y chatean contigo directamente mediante un servidor web integrado en la app.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎙️</div>
+                <h3>Walkie-Talkie</h3>
+                <p>Envía mensajes de voz si no puedes escribir. Mantén presionado el botón del micrófono y habla.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Activación Automática</h3>
+                <p>Si pierdes señal celular, el SOS se activa solo. No necesitas desbloquear el teléfono ni tocar ningún botón.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Sin instalar nada</h3>
+                <p>Los rescatistas pueden conectarse usando solo su navegador web. No requieren descargar la app.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🆘</div>
+                <h3>Mensajes Rápidos</h3>
+                <p>"Estoy herido", "Necesito agua", "Hay más personas aquí". Un toque, un mensaje vital.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="steps-container">
+            <h2 class="section-title">Cómo funciona</h2>
+            <p class="section-subtitle">Tres pasos simples entre la tragedia y el rescate.</p>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>La víctima activa el SOS</h3>
+                    <p>Al abrir la app y presionar <strong>ACTIVAR SOS</strong>, el teléfono crea una red WiFi llamada <code>DIRECT-SOS-[tu DNI]</code>. No necesita internet ni cobertura celular.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Los drones detectan la señal</h3>
+                    <p>Drones de rescate equipados con scanners WiFi sobrevuelan la zona y detectan las redes SOS. Cada red revela la identidad de una persona atrapada.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Comunicación directa</h3>
+                    <p>Los rescatistas se conectan a la red con contraseña <code>sos12345</code> y abren <code>http://192.168.49.1:8080</code> en su navegador para chatear con la víctima.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section">
+        <h2 class="section-title">Conexión de Rescatista</h2>
+        <p class="section-subtitle">Los rescatistas no necesitan instalar nada. Solo su navegador.</p>
+        
+        <div class="demo-card">
+            <p style="color: var(--text-dim); margin-bottom: 1rem;">Busca esta red WiFi en tu teléfono:</p>
+            <div class="wifi-name">DIRECT-SOS-XXXXXXXXXX</div>
+            <p style="color: var(--text-dim); margin-bottom: 0.5rem;">Contraseña:</p>
+            <div class="password-pill">sos12345</div>
+            <p style="color: var(--text-dim); margin-top: 1.5rem;">Luego abre en tu navegador:</p>
+            <div class="wifi-name" style="background: rgba(0,255,255,0.1); color: var(--cyan); border-color: rgba(0,255,255,0.2);">http://192.168.49.1:8080</div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                ¿Necesito internet para que funcione?
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">No. La app usa WiFi Direct que funciona de teléfono a teléfono sin internet ni señal celular.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                ¿Qué alcance tiene la señal?
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">WiFi Direct tiene un alcance de aproximadamente 50 a 100 metros en condiciones normales. Los drones pueden detectar la señal desde el aire a mayor distancia.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                ¿Gasta mucha batería?
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">El consumo es moderado. Se recomienda poner el brillo al mínimo y cerrar otras apps para ahorrar batería en emergencias.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                ¿Pueden chatear varias personas a la vez?
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">Sí, varios rescatistas pueden conectarse y chatear simultáneamente con la víctima.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                ¿Qué versión de Android necesito?
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">Android 10 o superior para el nombre personalizado de red. Android 8 o superior para funcionalidad básica.</div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="footer-quote">"Quien no vive para servir, no sirve para vivir"</p>
+        <p class="footer-author">Richard Javier Oliveros Alvarez</p>
+        <p class="footer-version">SOS Emergencia v1.0 — Junio 2026</p>
+        <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem;">Desarrollado para salvar vidas. Código abierto para la humanidad.</p>
+        <div class="footer-links">
+            <a href="https://github.com/RichardOliveros/sos_emergencia" target="_blank">GitHub</a>
+            <a href="#" onclick="document.getElementById('downloadBtn').click(); return false;">Descargar</a>
+        </div>
+    </footer>
+
+    <div class="notification" id="notification">
+        ✅ Descarga registrada. Gracias por salvar vidas.
+    </div>
+
+    <script>
+        // ===== LOGGING DE DESCARGAS =====
+        // Envía IP, User-Agent, timestamp y ubicación a un endpoint configurable
+        // Por defecto usa Google Apps Script (configurar WEBAPP_URL)
+        
+        const WEBAPP_URL = ''; // ← Pega aquí la URL del Apps Script después de desplegarlo
+        
+        async function logDownload() {
+            try {
+                // Obtener IP pública
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const ip = ipData.ip;
+                
+                // Obtener info de ubicación
+                let location = 'Desconocida';
+                try {
+                    const locResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                    const locData = await locResponse.json();
+                    location = `${locData.city || ''}, ${locData.country_name || ''}`.replace(/^,\s*/, '').replace(/,\s*$/, '') || 'Desconocida';
+                } catch(e) { /* ignorar */ }
+                
+                const data = {
+                    timestamp: new Date().toISOString(),
+                    ip: ip,
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    screen: `${screen.width}x${screen.height}`,
+                    location: location,
+                    referrer: document.referrer || 'Directo',
+                    page: window.location.href
+                };
+                
+                // Enviar al webhook si está configurado
+                if (WEBAPP_URL) {
+                    fetch(WEBAPP_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data),
+                        mode: 'no-cors'
+                    }).catch(() => {});
+                }
+                
+                // También log en console para debugging
+                console.log('[SOS Log]', data);
+                
+            } catch (err) {
+                console.error('[SOS Log Error]', err);
+            }
+        }
+        
+        // Botón de descarga
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+            logDownload();
+            
+            // Mostrar notificación
+            const notif = document.getElementById('notification');
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 4000);
+        });
+        
+        // Animación de contadores al entrar en viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        document.querySelectorAll('.feature-card, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
