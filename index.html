@@ -486,11 +486,10 @@
         </p>
 
         <div class="download-section">
-            <a href="https://drive.google.com/drive/folders/1zIJWbcRgusnH80fr3RaDh4shfxFxjspg" 
-               target="_blank" 
-               rel="noopener noreferrer"
+            <a href="#" 
                class="btn-download" 
-               id="downloadBtn">
+               id="downloadBtn"
+               onclick="handleDownload(event)">
                 <span class="btn-icon">⬇️</span>
                 <span>DESCARGAR SOS EMERGENCIA</span>
             </a>
@@ -646,7 +645,7 @@
         <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem;">Desarrollado para salvar vidas. Código abierto para la humanidad.</p>
         <div class="footer-links">
             <a href="https://github.com/RichardOliveros/sos_emergencia" target="_blank">GitHub</a>
-            <a href="#" onclick="document.getElementById('downloadBtn').click(); return false;">Descargar</a>
+            <a href="#" onclick="handleDownload(event); return false;">Descargar</a>
         </div>
     </footer>
 
@@ -655,67 +654,51 @@
     </div>
 
     <script>
-        // ===== LOGGING DE DESCARGAS =====
-        // Envía IP, User-Agent, timestamp y ubicación a un endpoint configurable
-        // Por defecto usa Google Apps Script (configurar WEBAPP_URL)
-        
-        const WEBAPP_URL = ''; // ← Pega aquí la URL del Apps Script después de desplegarlo
-        
-        async function logDownload() {
-            try {
-                // Obtener IP pública
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                const ip = ipData.ip;
-                
-                // Obtener info de ubicación
-                let location = 'Desconocida';
-                try {
-                    const locResponse = await fetch(`https://ipapi.co/${ip}/json/`);
-                    const locData = await locResponse.json();
-                    location = `${locData.city || ''}, ${locData.country_name || ''}`.replace(/^,\s*/, '').replace(/,\s*$/, '') || 'Desconocida';
-                } catch(e) { /* ignorar */ }
-                
-                const data = {
-                    timestamp: new Date().toISOString(),
-                    ip: ip,
-                    userAgent: navigator.userAgent,
-                    platform: navigator.platform,
-                    language: navigator.language,
-                    screen: `${screen.width}x${screen.height}`,
-                    location: location,
-                    referrer: document.referrer || 'Directo',
-                    page: window.location.href
-                };
-                
-                // Enviar al webhook si está configurado
-                if (WEBAPP_URL) {
-                    fetch(WEBAPP_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data),
-                        mode: 'no-cors'
-                    }).catch(() => {});
-                }
-                
-                // También log en console para debugging
-                console.log('[SOS Log]', data);
-                
-            } catch (err) {
-                console.error('[SOS Log Error]', err);
-            }
-        }
-        
-        // Botón de descarga
-        document.getElementById('downloadBtn').addEventListener('click', function(e) {
-            logDownload();
-            
+        // ===== CONFIGURACIÓN =====
+        const WEBHOOK_URL = 'https://n8n-n8n.gelkjo.easypanel.host/webhook/sos';
+        const DRIVE_URL = 'https://drive.google.com/drive/folders/1zIJWbcRgusnH80fr3RaDh4shfxFxjspg';
+
+        // ===== FUNCIÓN PRINCIPAL DE DESCARGA =====
+        async function handleDownload(e) {
+            e.preventDefault();
+
             // Mostrar notificación
             const notif = document.getElementById('notification');
             notif.classList.add('show');
             setTimeout(() => notif.classList.remove('show'), 4000);
-        });
-        
+
+            // Obtener IP pública
+            let ip = 'No disponible';
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                ip = ipData.ip;
+            } catch (err) {
+                console.error('[SOS] Error obteniendo IP:', err);
+            }
+
+            // Preparar datos para el webhook
+            const data = {
+                ip: ip,
+                userAgent: navigator.userAgent
+            };
+
+            // Enviar POST al webhook
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    mode: 'no-cors'
+                });
+            } catch (err) {
+                console.error('[SOS] Error enviando al webhook:', err);
+            }
+
+            // Redirigir al link de Drive
+            window.open(DRIVE_URL, '_blank');
+        }
+
         // Animación de contadores al entrar en viewport
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
